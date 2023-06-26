@@ -6,8 +6,7 @@ services:
                 user: oxygem
                 uid: 1000
             context: ./
-            dockerfile:
-                docker/php.Dockerfile
+            dockerfile: docker/php.Dockerfile
         container_name: wsr-app
         restart: unless-stopped
         working_dir: /var/www
@@ -38,7 +37,9 @@ services:
             - "80:80"
         volumes:
             - ./:/var/www
-            - ./docker/nginx/:/etc/nginx/conf.d/
+            - ./docker/nginx:/etc/nginx/conf.d/
+        networks:
+            - traffic
 networks:
     traffic:
         driver: bridge
