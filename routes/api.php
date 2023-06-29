@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('guest')->group(function () {
+    Route::post('/authorization', [LoginController::class, 'authentication']);
+    Route::post('/registration', [LoginController::class, 'registration']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/logout', [LoginController::class, 'logout']);
+    Route::post('/files', [FileController::class, 'uploadFiles']);
+    Route::get('/files/{file_id}', [FileController::class, 'getFile'])->name('get-file');
 });
