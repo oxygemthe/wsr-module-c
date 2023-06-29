@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\FileAccessController;
 use App\Http\Controllers\FileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,13 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout']);
+    Route::get('/files/disk', [FileController::class, 'getUserFiles']);
+    Route::get('/shared', [FileController::class, 'getSharedFiles']);
     Route::post('/files', [FileController::class, 'uploadFiles']);
-    Route::get('/files/{file_id}', [FileController::class, 'getFile'])->name('get-file');
+    Route::patch('/files/{file:file_id}', [FileController::class, 'renameFile']);
+    Route::delete('/files/{file:file_id}', [FileController::class, 'deleteFile']);
+    Route::get('/files/{file:file_id}', [FileController::class, 'getFile'])->name('get-file');
+
+    Route::post('/files/{file:file_id}/accesses', [FileAccessController::class, 'provideAccess']);
+    Route::delete('/files/{file:file_id}/accesses', [FileAccessController::class, 'takeAwayAccess']);
 });

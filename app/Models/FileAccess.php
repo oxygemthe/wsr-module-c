@@ -16,6 +16,10 @@ class FileAccess extends Model
         'fk_file'
     ];
 
+    protected $with = [
+        'author'
+    ];
+
     public function author()
     {
         return $this->belongsTo(User::class, 'fk_author');
